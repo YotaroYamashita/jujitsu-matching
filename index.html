@@ -107,10 +107,11 @@
           let b = current[n - 1 - i];
 
           if (a !== "休み" && b !== "休み") {
-            output += a + " vs " + b;
+            output += a + " vs " + b + "\n";
           } else {
             output += (a === "休み" ? b : a) + " は休み\n";
           }
+
         }
 
         output += "\n";
