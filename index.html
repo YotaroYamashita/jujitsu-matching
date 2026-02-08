@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>柔術 対戦表メーカー</title>
+</head>
+
+<body>
+  <h2>柔術 対戦表メーカー</h2>
+
+  <input id="nameInput" placeholder="名前を入力">
+  <button onclick="addPlayer()">追加</button>
+
+  <h3>参加者</h3>
+  <ul id="playerList"></ul>
+
+  <button onclick="makeTable()">対戦表を作る</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    let players = [];
+
+    function addPlayer() {
+      let name = document.getElementById("nameInput").value.trim();
+      if (name === "") return;
+
+      players.push(name);
+      document.getElementById("nameInput").value = "";
+
+      showPlayers();
+    }
+
+    function showPlayers() {
+      let list = document.getElementById("playerList");
+      list.innerHTML = "";
+
+      for (let i = 0; i < players.length; i++) {
+        let li = document.createElement("li");
+        li.innerText = players[i];
+        list.appendChild(li);
+      }
+    }
+
+    function makeTable() {
+
+      let list = [...players];
+
+      if (list.length < 2) {
+        alert("2人以上必要です");
+        return;
+      }
+
+      if (list.length % 2 === 1) {
+        list.push("休み");
+      }
+
+      let n = list.length;
+      let fixed = list[0];
+      let rotating = list.slice(1);
+
+      let output = "";
+
+      for (let round = 1; round <= n - 1; round++) {
+        output += "【第" + round + "セット】\n";
+
+        let current = [fixed, ...rotating];
+
+        for (let i = 0; i < n / 2; i++) {
+          let a = current[i];
+          let b = current[n - 1 - i];
+
+          if (a !== "休み" && b !== "休み") {
+            output += a + " vs " + b + "（攻守交替）\n";
+          } else {
+            output += (a === "休み" ? b : a) + " は休み\n";
+          }
+        }
+
+        output += "\n";
+        rotating.unshift(rotating.pop());
+      }
+
+      document.getElementById("result").innerText = output;
+    }
+  </script>
+</body>
+</html>
